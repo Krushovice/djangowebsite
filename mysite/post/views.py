@@ -9,7 +9,7 @@ from .forms import EmailPostForm
 # Create your views here.
 def index(request):
     posts_list = Post.published.all()
-    paginator = Paginator(posts_list, 5)
+    paginator = Paginator(posts_list, 1)
     page_number = request.GET.get("page", 1)
     try:
         posts = paginator.get_page(page_number)
@@ -19,8 +19,8 @@ def index(request):
         posts = paginator.page(paginator.num_pages)
     return render(
         request,
-        "posts/index.html",
-        {"posts": posts},
+        "post/index.html",
+        {"post": posts},
     )
 
 
@@ -41,7 +41,7 @@ def post_detail(
     )
     return render(
         request,
-        "posts/post_detail.html",
+        "post/post_detail.html",
         {"post": post},
     )
 
