@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Читатели{% endblock %}
+{% block content %}
+
+<table class="table">
+  <thead class="table-light">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Никнейм</th>
+      <th scope="col">Почта</th>
+      <th scope="col">Дата регистрации</th>
+    </tr>
+  </thead>
+
+  <tbody>
+   {% for user in users %}
+    <tr>
+      <th scope="row"></th>
+      <td><a href="{{ user.get_absolute_url }}">{{ user.username }}</a></td>
+      <td>{{ user.email }}</td>
+      <td>{{ user.created_at }}</td>
+    </tr>
+   {% endfor %}
+  </tbody>
+</table>
+ {% include "components/pagination.html" with page=users %}
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card mb-3" style="max-width: 540px;">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <img src="https://static.vecteezy.com/system/resources/previews/029/271/062/non_2x/avatar-profile-icon-in-flat-style-male-user-profile-illustration-on-isolated-background-man-profile-sign-business-concept-vector.jpg" class="img-fluid rounded-start" alt="...">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h4 class="card-title">Карточка читателя</h4>
+        <p class="card-text">
+          <ul>
+            <li>Никнейм: {{ user.username }}</li>
+            <li>Любимые книги: </li>
+            <li>Любимый жанр: </li>
+            <li>Читаю сейчас: </li>
+          </ul>
+        <p class="card-text"><small class="text-muted">Зарегистрирован {{ user.created_at }}</small></p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
