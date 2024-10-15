@@ -25,4 +25,5 @@ urlpatterns = [
     path("", views.IndexView.as_view(), name="index"),
     path("admin/", admin.site.urls),
     path("posts/", include("mysite.post.urls", namespace="post")),
+    path("users/", include("mysite.user.urls", namespace="user")),
 ]
