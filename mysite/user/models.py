@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.urls import reverse
 
 
 # Create your models here.
@@ -14,6 +15,14 @@ class CustomUser(AbstractUser):
         indexes = [
             models.Index(fields=["-username"]),
         ]
+
+    def get_absolute_url(self):
+        return reverse(
+            "user:user_profile",
+            args=[
+                self.pk,
+            ],
+        )
 
     def __str__(self):
         return self.username
