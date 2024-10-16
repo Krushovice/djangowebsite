@@ -1,17 +1,23 @@
 <nav class="navbar navbar-expand-lg bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Главная</a>
+        {% if not request.path == '/' %}
+      <a class="navbar-brand" href="{% url 'index' %}">Главная</a>
+    {% endif %}
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        {% if not request.path == '/users/' %}
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="{% url 'user:users_index' %}">Пользователи</a>
         </li>
+        {% endif %}
+        {% if not request.path == '/posts/' %}
         <li class="nav-item">
-          <a class="nav-link active" href="{% url 'post:posts_index' %}">Блог</a>
+          <a class="nav-link active" href="{% url 'post:posts_index' %}">Статьи</a>
         </li>
+        {% endif %}
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Книги
@@ -24,7 +30,7 @@
           </ul>
         </li>
         <li class="nav-item">
-          <a class="nav-link disabled">Отключить</a>
+          <a class="nav-link active">Вход</a>
         </li>
       </ul>
       <form class="d-flex" role="search">
