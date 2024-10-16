@@ -1,0 +1,18 @@
+{% extends 'post/base.html' %}
+
+{% block title %}Статьи{% endblock %}
+{% block content %}
+ <h2>Статьи</h2>
+ {% for post in posts %}
+   <h2>
+   <a href="{{ post.get_absolute_url }}">
+   {{ post.title }}
+   </a>
+   </h2>
+   <p class="date">
+   Опубликовано {{ post.publish }}, автор {{ post.author }}
+   </p>
+   {{ post.body|truncatewords:30|linebreaks }}
+   {% endfor %}
+ {% include "components/pagination.html" with page=posts %}
+{% endblock %}
