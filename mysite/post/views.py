@@ -10,7 +10,7 @@ from .forms import EmailPostForm
 def index(request):
     posts_list = Post.published.all()
     paginator = Paginator(posts_list, 1)
-    page_number = request.GET.get("page", 1)
+    page_number = request.GET.get("page", 3)
     try:
         posts = paginator.get_page(page_number)
     except PageNotAnInteger:
@@ -20,7 +20,7 @@ def index(request):
     return render(
         request,
         "post/index.html",
-        {"post": posts},
+        {"posts": posts},
     )
 
 
@@ -64,7 +64,7 @@ def post_share(request, post_pk):
         form = EmailPostForm()
     return render(
         request,
-        "blog/post/share.html",
+        "post/share.html",
         {
             "post": post,
             "form": form,
