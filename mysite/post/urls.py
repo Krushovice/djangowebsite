@@ -7,8 +7,9 @@ app_name = "post"
 urlpatterns = [
     path("", views.PostListView.as_view(), name="index"),
     path(
-        "<int:year>/<int:month>/<int:day>/<slug:post>/",
-        views.post_detail,
+        "<int:pk>/",
+        views.PostDetailView.as_view(),
         name="detail",
     ),
+    path("create/", views.CreatePostView.as_view(), name="create"),
 ]
