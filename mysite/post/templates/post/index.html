@@ -2,7 +2,9 @@
 
 {% block title %}Статьи{% endblock %}
 {% block content %}
- <h2>Статьи</h2>
+  <a class="btn btn-primary" href="{% url 'post:create' %}" role="button">Создать статью</a>
+
+  
  {% for post in posts %}
    <h2>
    <a href="{{ post.get_absolute_url }}">
@@ -12,7 +14,7 @@
    <p class="date">
    Опубликовано {{ post.publish }}, автор {{ post.author }}
    </p>
-   {{ post.body|truncatewords:30|linebreaks }}
+   {{ post.body|truncatewords:12|linebreaks }}
    {% endfor %}
  {% include "components/pagination.html" with page=posts %}
 {% endblock %}

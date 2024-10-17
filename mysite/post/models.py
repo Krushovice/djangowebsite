@@ -44,10 +44,7 @@ class Post(models.Model):
         return reverse(
             "post:detail",
             args=[
-                self.publish.year,
-                self.publish.month,
-                self.publish.day,
-                self.slug,
+                self.pk,
             ],
         )
 
