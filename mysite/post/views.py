@@ -52,8 +52,8 @@ class PostEmailView(FormView):
     success_url = "/thanks"
 
     def post(self, request, *args, **kwargs):
-        post = get_object_or_404(Post, slug=kwargs.get("pk"))
-        form = EmailPostForm(request.POST)
+        post = get_object_or_404(Post, pk=kwargs.get("pk"))
+        form = self.form_class(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
             post_url = request.build_absolute_uri(post.get_absolute_url())
