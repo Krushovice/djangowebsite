@@ -32,7 +32,6 @@ class PostListView(ListView):
     template_name = "post/index.html"
     context_object_name = "posts"
     paginate_by = 5
-    paginator_class = Paginator
 
 
 class CreatePostView(CreateView):
