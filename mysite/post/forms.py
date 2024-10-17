@@ -3,7 +3,7 @@ from django import forms
 from mysite.post.models import Post
 
 
-class EmailPostForm(forms.ModelForm):
+class EmailPostForm(forms.Form):
     name = forms.CharField(max_length=25)
     email = forms.EmailField()
     to = forms.EmailField()
