@@ -5,7 +5,7 @@ from . import views
 app_name = "post"
 
 urlpatterns = [
-    path("", views.index, name="index"),
+    path("", views.PostListView.as_view(), name="index"),
     path(
         "<int:year>/<int:month>/<int:day>/<slug:post>/",
         views.post_detail,
