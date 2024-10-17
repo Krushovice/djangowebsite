@@ -12,4 +12,5 @@ urlpatterns = [
         name="detail",
     ),
     path("create/", views.CreatePostView.as_view(), name="create"),
+    path("<int:pk>/share/", views.PostEmailView.as_view(), name="share"),
 ]

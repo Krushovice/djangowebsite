@@ -2,7 +2,10 @@ from audioop import reverse
 
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.views.generic import ListView, CreateView, DetailView
+
+from django.views.generic import ListView, CreateView, DetailView, FormView
+
+from django.core.mail import send_mail
 
 from .models import Post
 
@@ -43,49 +46,50 @@ class PostDetailView(DetailView):
     model = Post
 
 
-# def post_detail(
-#     request,
-#     year,
-#     month,
-#     day,
-#     post,
-# ):
-#     post = get_object_or_404(
-#         Post,
-#         slug=post,
-#         status=Post.Status.PUBLISHED,
-#         publish__year=year,
-#         publish__month=month,
-#         publish__day=day,
-#     )
-#     return render(
-#         request,
-#         "post/post_detail.html",
-#         {"post": post},
-#     )
-#
-#
-# def post_share(request, post_pk):
-#     # Retrieve post by id
-#     post = get_object_or_404(
-#         Post,
-#         id=post_pk,
-#         status=Post.Status.PUBLISHED,
-#     )
-#     if request.method == "POST":
-#         # Form was submitted
-#         form = EmailPostForm(request.POST)
-#         if form.is_valid():
-#             # Form fields passed validation
-#             cd = form.cleaned_data
-#             # ... send email
-#     else:
-#         form = EmailPostForm()
-#     return render(
-#         request,
-#         "post/share.html",
-#         {
-#             "post": post,
-#             "form": form,
-#         },
-#     )
+class PostEmailView(FormView):
+    template_name = "post/email_share.html"
+    form_class = EmailPostForm
+    success_url = "/thanks"
+
+    def post(self, request, *args, **kwargs):
+        post = get_object_or_404(Post, slug=kwargs.get("pk"))
+        form = EmailPostForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            post_url = request.build_absolute_uri(post.get_absolute_url())
+            subject = (
+                f"{cd['name']} ({cd['email']}) " f"recommends you read {post.title}"
+            )
+            message = (
+                f"Read {post.title} at {post_url}\n\n"
+                f"{cd['name']}'s comments: {cd['comments']}"
+            )
+            send_mail(
+                subject=subject,
+                message=message,
+                from_email=None,
+                recipient_list=[cd["to"]],
+            )
+            sent = True
+            return render(
+                request,
+                self.template_name,
+                {
+                    "post": post,
+                    "form": form,
+                    "sent": sent,
+                },
+            )
+
+    def get(self, request, *args, **kwargs):
+        post = get_object_or_404(Post, pk=kwargs.get("pk"))
+        sent = False
+        return render(
+            request,
+            self.template_name,
+            {
+                "post": post,
+                "form": self.form_class,
+                "sent": sent,
+            },
+        )
