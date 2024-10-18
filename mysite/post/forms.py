@@ -1,6 +1,6 @@
 from django import forms
 
-from mysite.post.models import Post
+from .models import Post, Comment
 
 
 class EmailPostForm(forms.Form):
@@ -23,3 +23,9 @@ class PostForm(forms.ModelForm):
             "author",
             "status",
         )
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ["name", "email", "body"]
