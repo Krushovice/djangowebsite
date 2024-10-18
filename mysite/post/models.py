@@ -50,3 +50,30 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Comment(models.Model):
+    class Meta:
+        ordering = ["-created"]
+        indexes = [
+            models.Index(fields=["-created"]),
+        ]
+
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
+    name = models.CharField(max_length=80)
+    email = models.EmailField()
+    body = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    active = models.BooleanField(default=True)
+
+    def get_absolute_url(self):
+        return reverse(
+            "post:comment",
+            args=[
+                self.pk,
+            ],
+        )
+
+    def __str__(self):
+        return f"Comment by {self.name} on {self.post}"
