@@ -1,33 +1,37 @@
 from audioop import reverse
 
 from django.shortcuts import render, get_object_or_404
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-from django.views.generic import ListView, CreateView, DetailView, FormView
+from django.views.generic import (
+    ListView,
+    CreateView,
+    DetailView,
+    FormView,
+)
 
 from django.core.mail import send_mail
 
-from .models import Post
+from .models import Post, Comment
 
-from .forms import EmailPostForm, PostForm
+from .forms import EmailPostForm, PostForm, CommentForm
 
 
 # Create your views here.
-def index(request):
-    posts_list = Post.published.all()
-    paginator = Paginator(posts_list, 1)
-    page_number = request.GET.get("page", 3)
-    try:
-        posts = paginator.get_page(page_number)
-    except PageNotAnInteger:
-        posts = paginator.page(1)
-    except EmptyPage:
-        posts = paginator.page(paginator.num_pages)
-    return render(
-        request,
-        "post/index.html",
-        {"posts": posts},
-    )
+# def index(request):
+#     posts_list = Post.published.all()
+#     paginator = Paginator(posts_list, 1)
+#     page_number = request.GET.get("page", 3)
+#     try:
+#         posts = paginator.get_page(page_number)
+#     except PageNotAnInteger:
+#         posts = paginator.page(1)
+#     except EmptyPage:
+#         posts = paginator.page(paginator.num_pages)
+#     return render(
+#         request,
+#         "post/index.html",
+#         {"posts": posts},
+#     )
 
 
 class PostListView(ListView):
@@ -93,3 +97,9 @@ class PostEmailView(FormView):
                 "sent": sent,
             },
         )
+
+
+class CommentCreateView(CreateView):
+    template_name = "post/comment.html"
+    model = Comment
+    form_class = CommentForm
