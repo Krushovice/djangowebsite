@@ -2,6 +2,8 @@ from audioop import reverse
 
 from django.shortcuts import render, get_object_or_404
 
+from django.views.decorators.http import require_POST
+
 from django.views.generic import (
     ListView,
     CreateView,
@@ -46,8 +48,25 @@ class CreatePostView(CreateView):
     form_class = PostForm
 
 
-class PostDetailView(DetailView):
-    model = Post
+def post_detail(request, pk: int):
+    post = get_object_or_404(
+        Post,
+        pk=pk,
+        status=Post.Status.PUBLISHED,
+    )
+    # List of active comments for this post
+    comments = post.comments.filter(active=True)
+    # Form for users to comment
+    form = CommentForm()
+    return render(
+        request,
+        "post/detail.html",
+        {
+            "post": post,
+            "comments": comments,
+            "form": form,
+        },
+    )
 
 
 class PostEmailView(FormView):
@@ -99,7 +118,31 @@ class PostEmailView(FormView):
         )
 
 
-class CommentCreateView(CreateView):
-    template_name = "post/comment.html"
-    model = Comment
-    form_class = CommentForm
+# class CommentCreateView(CreateView):
+#     template_name = "post/comment.html"
+#     model = Comment
+#     form_class = CommentForm
+
+
+@require_POST
+def post_comment_create(request, pk: int):
+    post = get_object_or_404(
+        Post,
+        pk=pk,
+        status=Post.Status.PUBLISHED,
+    )
+    comment = None
+    form = CommentForm(request.POST)
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.post = post
+        comment.save()
+    return render(
+        request,
+        "post/comment.html",
+        context={
+            "post": post,
+            "form": form,
+            "comment": comment,
+        },
+    )

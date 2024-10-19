@@ -8,13 +8,13 @@ urlpatterns = [
     path("", views.PostListView.as_view(), name="index"),
     path(
         "<int:pk>/",
-        views.PostDetailView.as_view(),
+        views.post_detail,
         name="detail",
     ),
     path(
-        "create/",
-        views.CreatePostView.as_view(),
-        name="create",
+        "<int:pk>/comment/",
+        views.post_comment_create,
+        name="comment",
     ),
     path(
         "<int:pk>/share/",
@@ -22,8 +22,8 @@ urlpatterns = [
         name="share",
     ),
     path(
-        "<int:pk>/comment/",
-        views.CommentCreateView.as_view(),
-        name="comment",
+        "create/",
+        views.CreatePostView.as_view(),
+        name="create",
     ),
 ]
