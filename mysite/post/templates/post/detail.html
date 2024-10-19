@@ -1,0 +1,32 @@
+{% extends "post/base.html" %}
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+    <h1>{{ post.title }}</h1>
+    <p class="date">
+        Published {{ post.publish }} by {{ post.author }}
+    </p>
+    {{ post.body|linebreaks }}
+    <p>
+    <a href="{% url "post:share" post.pk %}">
+        Share the post
+    </a>
+    </p>
+    
+    {% with comments.count as total_comments %}
+        <h4>
+        {{ total_comments }} comment{{ total_comments|pluralize }}
+        </h4>
+    {% endwith %}
+    {% for comment in comments %}
+        <div class="comment">
+            <p class="info">
+            Comment {{ forloop.counter }} by {{ comment.name }}
+            {{ comment.created }}
+            </p>
+            {{ comment.body|truncatewords:10|linebreaks }}
+        </div>
+    {% empty %}
+    {% endfor %}
+    {% include "post/components/comment_form.html" %}
+{% endblock %}
