@@ -5,6 +5,9 @@ from django.shortcuts import render, get_object_or_404
 
 from django.views.decorators.http import require_POST
 
+from django.db.models import Count
+
+
 from django.views.generic import (
     ListView,
     CreateView,
@@ -70,8 +73,16 @@ def post_detail(request, pk: int):
     )
     # List of active comments for this post
     comments = post.comments.filter(active=True)
+
     # Form for users to comment
     form = CommentForm()
+
+    post_tags_ids = post.tags.values_list("id", flat=True)
+    similar_posts = Post.published.filter(tags__in=post_tags_ids).exclude(id=post.id)
+    similar_posts = similar_posts.annotate(same_tags=Count("tags")).order_by(
+        "-same_tags", "-publish"
+    )[:4]
+
     return render(
         request,
         "post/detail.html",
@@ -79,6 +90,7 @@ def post_detail(request, pk: int):
             "post": post,
             "comments": comments,
             "form": form,
+            "similar_posts": similar_posts,
         },
     )
 
