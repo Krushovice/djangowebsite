@@ -137,6 +137,7 @@ def post_comment_create(request, pk: int):
         comment = form.save(commit=False)
         comment.post = post
         comment.save()
+
     return render(
         request,
         "post/comment.html",

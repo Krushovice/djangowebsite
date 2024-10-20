@@ -1,11 +1,21 @@
 <form action="{% url 'post:comment' post.pk %}" method="post">
-    <div class="left">
-        {{ form.name.as_field_group }}
+    
+    <div class="mb-3">
+        <label for="id_name" class="form-label">Username</label>
+        <input type="text" class="form-control" id="id_name" name="name" placeholder="Your username">
+    </div>  
+    
+    <div class="mb-3">
+        <label for="id_email" class="form-label">Email address</label>
+        <input type="email" class="form-control" id="id_email" name="email" placeholder="name@example.com">
     </div>
-    <div class="left">
-        {{ form.email.as_field_group }}
+    
+    <div class="form-floating mb-3">
+        <textarea class="form-control" placeholder="Leave a comment here" id="id_body" name="body" style="height: 100px"></textarea>
+        <label for="id_body">Comment</label>
     </div>
-    {{ form.body.as_field_group }}
     {% csrf_token %}
-    <p><input type="submit" value="Add comment"></p>
+    <div>
+        <p><input type="submit" value="Add comment"></p>
+    </div>
 </form>
