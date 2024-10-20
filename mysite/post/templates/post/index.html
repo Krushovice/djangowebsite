@@ -1,20 +1,32 @@
 {% extends 'post/base.html' %}
 
-{% block title %}Posts{% endblock %}
+{% block title %}Blog{% endblock %}
 {% block content %}
-  <a class="btn btn-primary" href="{% url 'post:create' %}" role="button">Create post</a>
+    <h2 class="mb-3">My Blog</h2>
+    <a class="btn btn-primary mb-3" href="{% url 'post:create' %}" role="button">
+        Create post
+    </a>
+    {% if tag %}
+        <h3>Posts tagged with "{{ tag.name }}"</h3>
+    {% endif %}
+    {% for post in posts %}
+        <h2>
+            <a href="{{ post.get_absolute_url }}">
+                {{ post.title }}
+            </a>
+        </h2>
+        <p class="tags">
+            Tags:
+            {% for tag in post.tags.all %}
+                <a href="{% url 'post:index_by_tag' tag.slug %}">
+                    {{ tag.name }}
+                </a> {% if not forloop.last %}, {% endif %}
+            {% endfor %}    
 
-  
- {% for post in posts %}
-   <h2>
-   <a href="{{ post.get_absolute_url }}">
-   {{ post.title }}
-   </a>
-   </h2>
-   <p class="date">
-   Published {{ post.publish }}by {{ post.author }}
-   </p>
-   {{ post.body|truncatewords:12|linebreaks }}
-   {% endfor %}
- {% include "components/pagination.html" with page=posts %}
+        <p class="date">
+            Published {{ post.publish }}by {{ post.author }}
+        </p>
+        {{ post.body|truncatewords:12|linebreaks }}
+    {% endfor %}
+    {% include "components/pagination.html" with page=posts %}
 {% endblock %}
