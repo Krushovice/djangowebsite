@@ -69,7 +69,7 @@ class Comment(models.Model):
 
     def get_absolute_url(self):
         return reverse(
-            "post:create_comment",
+            "post:comment",
             args=[
                 self.pk,
             ],
