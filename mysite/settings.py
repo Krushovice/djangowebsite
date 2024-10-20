@@ -126,7 +126,7 @@ AUTH_USER_MODEL = "user.CustomUser"
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Ust-Nera"
 
 USE_I18N = True
 
