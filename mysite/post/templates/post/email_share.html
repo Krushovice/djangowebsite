@@ -1,7 +1,7 @@
 {% extends 'post/base.html' %}
 
 {% block title %}
-  Отправка статьи
+  Share post
 {% endblock %}
 
 
@@ -19,5 +19,5 @@
   <input type="submit" value="Send e-mail">
   </form>
  {% endif %}
-  <a  href="{{ post.get_absolute_url }}" role="button">Назад</a>
+  <a  href="{{ post.get_absolute_url }}" role="button">Back</a>
 {% endblock %}

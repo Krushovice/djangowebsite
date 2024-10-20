@@ -4,9 +4,10 @@
   Create new post
 {% endblock %}
 {% block content %}
-  <h3>Создание новой статьи:</h3>
-  <form method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Опубликовать">
-  </form>
+    <form method="post">{% csrf_token %}
+        <div class="mb3">
+            <label class="form-label">{{ form.as_p }}</label>
+          </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
 {% endblock %}
