@@ -17,6 +17,16 @@
             Back to posts list
         </a>
     </p>
+    <h3>Similar posts</h3>
+    {% for post in similar_posts %}
+        <p>
+            <a href="{{ post.get_absolute_url }}">
+                {{ post.title }}
+            </a>
+        </p>
+        {% empty %}
+            <p>There are no similar posts.</p>
+    {% endfor %}    
     
     {% with comments.count as total_comments %}
         <h4>
