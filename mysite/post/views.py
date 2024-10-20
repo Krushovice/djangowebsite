@@ -1,5 +1,6 @@
 from audioop import reverse
 
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, get_object_or_404
 
 from django.views.decorators.http import require_POST
@@ -13,34 +14,47 @@ from django.views.generic import (
 
 from django.core.mail import send_mail
 
+from taggit.models import Tag
+
 from .models import Post, Comment
 
 from .forms import EmailPostForm, PostForm, CommentForm
 
 
 # Create your views here.
-# def index(request):
-#     posts_list = Post.published.all()
-#     paginator = Paginator(posts_list, 1)
-#     page_number = request.GET.get("page", 3)
-#     try:
-#         posts = paginator.get_page(page_number)
-#     except PageNotAnInteger:
-#         posts = paginator.page(1)
-#     except EmptyPage:
-#         posts = paginator.page(paginator.num_pages)
-#     return render(
-#         request,
-#         "post/index.html",
-#         {"posts": posts},
-#     )
+def index(request, tag_slug=None):
+    posts_list = Post.published.all()
+    tag = None
+    if tag_slug:
+        tag = get_object_or_404(
+            Tag,
+            slug=tag_slug,
+        )
+        posts_list = posts_list.filter(tags__in=[tag])
+
+    paginator = Paginator(posts_list, 3)
+    page_number = request.GET.get("page", 1)
+    try:
+        posts = paginator.get_page(page_number)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+    return render(
+        request,
+        "post/index.html",
+        {
+            "posts": posts,
+            "tag": tag,
+        },
+    )
 
 
-class PostListView(ListView):
-    model = Post
-    template_name = "post/index.html"
-    context_object_name = "posts"
-    paginate_by = 5
+# class PostListView(ListView):
+#     model = Post
+#     template_name = "post/index.html"
+#     context_object_name = "posts"
+#     paginate_by = 5
 
 
 class CreatePostView(CreateView):

@@ -5,7 +5,12 @@ from . import views
 app_name = "post"
 
 urlpatterns = [
-    path("", views.PostListView.as_view(), name="index"),
+    path("", views.index, name="index"),
+    path(
+        "tag/<slug:tag_slug>/",
+        views.index,
+        name="index_by_tag",
+    ),
     path(
         "<int:pk>/",
         views.post_detail,
